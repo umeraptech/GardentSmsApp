@@ -16,7 +16,10 @@ class NavigationDrawer extends StatelessWidget {
               Navigator.pushReplacementNamed(context, pageRoutes.home),),
           createDrawerBodyItem(
             icon: Icons.mail,text: 'Monthly Sms', onTap: () =>
-              Navigator.pushReplacementNamed(context, pageRoutes.smpSpar),),
+              Navigator.pushReplacementNamed(context, pageRoutes.smsSpar),),
+          createDrawerBodyItem(
+            icon: Icons.mail,text: 'Sms Status', onTap: () =>
+              Navigator.pushReplacementNamed(context, pageRoutes.smsStatus),),
           const Divider(),
           ListTile(
             title: const Text('App version 1.0.0'),

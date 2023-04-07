@@ -3,6 +3,7 @@ import 'package:garden_sms_app/fragments/SmsSpars.dart';
 import 'package:garden_sms_app/pages/SplashScreen.dart';
 import 'package:garden_sms_app/routes/PageRoutes.dart';
 import 'package:garden_sms_app/fragments/HomePage.dart';
+import 'package:garden_sms_app/fragments/SmsStatus.dart';
 
 
 void main() {
@@ -20,8 +21,9 @@ class MyApp extends StatelessWidget {
       ),
       home: const SplashPage(title: "Sms App"),
       routes:  {
-        pageRoutes.smpSpar: (context) => SmsSparsFragment(title: "Sms Student Progress"),
+        pageRoutes.smsSpar: (context) => SmsSparsFragment(title: "Sms Student Progress"),
         pageRoutes.home: (context) => HomePageFragment(title: 'Home Page'),
+        pageRoutes.smsStatus: (context)=>SmsStatusFragment(title: "Sms Status")
         // pageRoutes.contact: (context) => contactPage(),
         // pageRoutes.event: (context) => eventPage(),
         // pageRoutes.profile: (context) => profilePage(),

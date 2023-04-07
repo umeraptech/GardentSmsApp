@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garden_sms_app/navigation_drawer/NavigationDrawerMain.dart'
     as nav;
-
 import 'dart:async';
 
 class HomePageFragment extends StatefulWidget {

@@ -6,7 +6,10 @@ import 'package:garden_sms_app/navigation_drawer/NavigationDrawerMain.dart'
     as nav;
 import 'package:garden_sms_app/services/api_service.dart';
 import 'package:garden_sms_app/models/monthly_spars.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:garden_sms_app/models/message_status.dart';
+import 'package:garden_sms_app/services/sharedPreferences_service.dart';
 
 class SmsSparsFragment extends StatefulWidget {
   const SmsSparsFragment({Key? key, required this.title}) : super(key: key);
@@ -28,12 +31,31 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
   late List<MonthlySpars> listSpars;
   late double _progressValue;
   late int _noOfMessages;
-  late int _currentMesssage;
+  late int _currentMessage;
+  List<MessageStatus> listMsg=[];
+  int _messageCounter =0;
+  late MessageStatus messageStatus;
   // var directSms = DirectSms();
 
-  Future<void> LoadSmsSpar() async {
+  Future<void> loadSmsSpar() async {
     listSpars = await api.getSpars();
     print(listSpars);
+  }
+
+  Future<void> loadMessageStatus() async{
+    setState(() {
+      SharedPreferencesService.getData().then((value){
+        for (var messageStatus in value) {
+          // print("Time ${messageStatus.time}");
+          listMsg.add(messageStatus);
+        }
+        print("length of list ${listMsg.length}");
+        for(MessageStatus mStatus in listMsg){
+          // print("total no of message ${mStatus.totalNoOfMessages}");
+          _messageCounter +=int.parse(mStatus.totalNoOfMessages);
+        }
+      });
+    });
   }
 
   _sendSms({required String number, required String message}) async {
@@ -41,13 +63,7 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
     if (await permission.isGranted) {
       // directSms.sendSms(message: message, phone: number);
     }
-    Timer(
-        const Duration(seconds: 4),
-        () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePageFragment(title: "Home Page"),
-            )));
+
   }
 
   Future<void> loadElements() async {
@@ -92,7 +108,7 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
         break;
     }
 
-    LoadSmsSpar().then((_) {
+    loadSmsSpar().then((_) {
       MonthlySpars msg = listSpars.first;
       String name = msg.getName().toUpperCase();
       String stdid = msg.getStudentId();
@@ -120,9 +136,10 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
   void initState() {
     // TODO: implement initState;
     _progressValue = 0.0;
-    _currentMesssage = 0;
+    _currentMessage = 0;
     _noOfMessages = 0;
     monthlySpars = api.getSpars();
+
     loadElements();
     super.initState();
   }
@@ -142,13 +159,13 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
               String prog = mSpar.getProgress();
               String assign = mSpar.getAssignment();
               String internal = mSpar.getInternal();
-              _currentMesssage += 1;
-              _progressValue = _currentMesssage / _noOfMessages!;
+              _currentMessage += 1;
+              _progressValue = _currentMessage / _noOfMessages!;
               String msg1 =
                   "The Academic record of $name,  batch $batch for the month of $month\nSID:$stdid\nSem:$sem\nClasses Held:$held\nAttended:$attend";
               String msg2 =
                   "Leaves:$leaves\nProgress:$prog\nMarks:$internal\nAssignment:$assign\n*For details contact 03458885535";
-              print(msg1);
+             // print(msg1);
 
               _sendSms(number: mSpar.studentno, message: msg1);
               _sendSms(number: mSpar.studentno, message: msg2);
@@ -157,7 +174,30 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
               // _sendSms(number: mSpar.studentno, message: msg2);
             })
           });
+
+      var date = DateTime.now().toString();
+      var dateParse = DateTime.parse(date);
+      var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
+      String sName = _staff.text;
+      String sDate = formattedDate.toString();
+      String sTime = DateFormat('hh:mm:ss a').format(DateTime.now()).toString();
+
+      var messageStatus = MessageStatus(lastSenderName: sName, date: sDate, time: sTime, type: "Monthly Spars", totalNoOfMessages: _noOfMessages!.toString());
+
+     // _messageCounter += _noOfMessages!;
+      print(messageStatus.totalNoOfMessages);
+      listMsg.add(messageStatus);
+      print(listMsg.length);
+      SharedPreferencesService.saveData(listMsg);
+
     });
+    Timer(
+        const Duration(seconds: 5),
+            () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePageFragment(title: "Home Page"),
+            )));
   }
 
   Future<void> _confirmDialog() async {
@@ -281,19 +321,41 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
             const SizedBox(
               height: 5.0,
             ),
-            TextButton(
-                onPressed: () {
-                  _confirmDialog();
-                },
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.grey),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: TextButton(
+                      onPressed: () {
+                        _confirmDialog();
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.grey),
+                      ),
+                      child: const Text(
+                        'Preview Message',
+                        style: TextStyle(color: Colors.white70),
+                      )),
                 ),
-                child: const Text(
-                  'Preview Message',
-                  style: TextStyle(color: Colors.white70),
-                )),
+                const SizedBox(width: 5.0,),
+                Expanded(
+                  flex: 1,
+                  child: TextButton(
+                      onPressed: () {
+                        loadMessageStatus();
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.grey),
+                      ),
+                      child: const Text(
+                        'Preview Status',
+                        style: TextStyle(color: Colors.white70),
+                      )),
+                ),
+              ],
+            ),
             const SizedBox(
-              height: 10.0,
+              height: 5.0,
             ),
             TextButton(
                 onPressed: () {
@@ -339,11 +401,15 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
             const SizedBox(
               height: 5.0,
             ),
+            Text('Daily Message Counter: $_messageCounter'),
+            const SizedBox(
+              height: 5.0,
+            ),
             Text('Progress: ${(_progressValue * 100).round()}%'),
             const SizedBox(
               height: 5.0,
             ),
-            Text('Send: $_currentMesssage of $_noOfMessages messages'),
+            Text('Send: $_currentMessage of $_noOfMessages messages'),
             const SizedBox(
               height: 5.0,
             ),
