@@ -23,7 +23,7 @@ class _HomePageFragmentState extends State<HomePageFragment> {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/Pheonix01.jpg"),
+              image: AssetImage("assets/images/background1.png"),
               fit: BoxFit.cover,
             ),
           ),

@@ -26,7 +26,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {},
           ),
           ListTile(
-            title: const Text('Powered by DeadMan Inc.'),
+            title: const Text('Powered by EServices'),
             onTap: () {},
           ),
         ],

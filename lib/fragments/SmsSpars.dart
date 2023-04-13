@@ -1,5 +1,5 @@
 import 'dart:async';
-//import 'package:direct_sms/direct_sms.dart';
+import 'package:direct_sms/direct_sms.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_sms_app/fragments/HomePage.dart';
 import 'package:garden_sms_app/navigation_drawer/NavigationDrawerMain.dart'
@@ -35,7 +35,7 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
   List<MessageStatus> listMsg=[];
   int _messageCounter =0;
   late MessageStatus messageStatus;
-  // var directSms = DirectSms();
+   var directSms = DirectSms();
 
   Future<void> loadSmsSpar() async {
     listSpars = await api.getSpars();
@@ -61,7 +61,7 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
   _sendSms({required String number, required String message}) async {
     final permission = Permission.sms.request();
     if (await permission.isGranted) {
-      // directSms.sendSms(message: message, phone: number);
+       directSms.sendSms(message: message, phone: number);
     }
 
   }
@@ -181,7 +181,7 @@ class _SmsSparsFragmentState extends State<SmsSparsFragment> {
       String sName = _staff.text;
       String sDate = formattedDate.toString();
       String sTime = DateFormat('hh:mm:ss a').format(DateTime.now()).toString();
-
+      _noOfMessages*=2;
       var messageStatus = MessageStatus(lastSenderName: sName, date: sDate, time: sTime, type: "Monthly Spars", totalNoOfMessages: _noOfMessages!.toString());
 
      // _messageCounter += _noOfMessages!;

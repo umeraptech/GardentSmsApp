@@ -31,4 +31,9 @@ class SharedPreferencesService{
     return mList;
   }
 
+  static Future<void> deleteData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+
 }
