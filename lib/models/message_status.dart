@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class MessageStatus{
+class MessageStatus {
   String lastSenderName;
   String date;
   String time;
@@ -8,38 +8,42 @@ class MessageStatus{
   String totalNoOfMessages;
 
   MessageStatus(
-      {
-        required this.lastSenderName,
-        required this.date,
-        required this.time,
-        required this.type,
-        required this.totalNoOfMessages
-      });
+      {required this.lastSenderName,
+      required this.date,
+      required this.time,
+      required this.type,
+      required this.totalNoOfMessages});
 
-  static Map<String,dynamic> toMap (MessageStatus mt)=>{
-    "lastSenderName": mt.lastSenderName,
-    "date": mt.date,
-    "time": mt.time,
-    "type": mt.type,
-    "totalNoOfMessages":mt.totalNoOfMessages
-  };
+  static Map<String, dynamic> toMap(MessageStatus mt) => {
+        "lastSenderName": mt.lastSenderName,
+        "date": mt.date,
+        "time": mt.time,
+        "type": mt.type,
+        "totalNoOfMessages": mt.totalNoOfMessages
+      };
 
-  static String encodeList(lStatus)=>json.encode(
-    lStatus.map<Map<String,dynamic>>((lStatuses) => MessageStatus.toMap(lStatuses)).toList(), );
+  static String encodeList(lStatus) => json.encode(
+        lStatus
+            .map<Map<String, dynamic>>(
+                (lStatuses) => MessageStatus.toMap(lStatuses))
+            .toList(),
+      );
 
-  factory MessageStatus.fromJsonList(Map<String,dynamic> jsonData){
+  factory MessageStatus.fromJsonList(Map<String, dynamic> jsonData) {
     return MessageStatus(
         lastSenderName: jsonData['lastSenderName'],
-        date: jsonData['data'],
+        date: jsonData['date'],
         time: jsonData['time'],
         type: jsonData['type'],
-        totalNoOfMessages: jsonData['totalNoOfMessages']
-    );
+        totalNoOfMessages: jsonData['totalNoOfMessages']);
   }
 
   static List<MessageStatus> decodeList(String status) =>
       (json.decode(status) as List<dynamic>)
-      .map<MessageStatus>((item)=>MessageStatus.fromJsonList(item))
-      .toList();
+          .map<MessageStatus>((item) => MessageStatus.fromJsonList(item))
+          .toList();
 
+  @override
+  String toString() =>
+      "Last Sender Name: $lastSenderName, Date Time: $date @ $time, Type: $type, Total Nos Of Msgs: $totalNoOfMessages ";
 }

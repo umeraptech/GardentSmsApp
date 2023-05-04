@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garden_sms_app/navigation_drawer/NavigationDrawerMain.dart'
     as nav;
-
 import 'dart:async';
 
 class HomePageFragment extends StatefulWidget {
@@ -24,7 +23,7 @@ class _HomePageFragmentState extends State<HomePageFragment> {
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/Pheonix01.jpg"),
+              image: AssetImage("assets/images/background1.png"),
               fit: BoxFit.cover,
             ),
           ),

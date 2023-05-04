@@ -75,7 +75,7 @@ class _SplashPageState extends State<SplashPage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/skeletonskull.gif"),
+            image: AssetImage("assets/images/background1.png"),
             fit: BoxFit.cover,  ),
         ),
         child: Center(
@@ -100,7 +100,7 @@ class _SplashPageState extends State<SplashPage> {
               //   ),
               // ),
               // const SizedBox(height: 20),
-              Text('App powered by DeadMan Inc.',
+              Text('App powered by EServices.',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,

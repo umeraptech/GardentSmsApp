@@ -38,6 +38,8 @@ dependencies:
   http: ^0.13.5
   direct_sms: ^0.0.1
   permission_handler: ^10.2.0
+  shared_preferences: any
+  intl: any
 
 dev_dependencies:
   flutter_test:
